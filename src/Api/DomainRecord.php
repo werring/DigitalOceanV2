@@ -67,14 +67,14 @@ class DomainRecord extends AbstractApi
      *
      * @return DomainRecordEntity
      */
-    public function create($domainName, $type, $name, $data, $priority = null, $port = null, $weight = null)
+    public function create($domainName, $type, $name, $data, $priority = null, $port = null, $weight = null, $ttl = null)
     {
         switch ($type = strtoupper($type)) {
             case 'A':
             case 'AAAA':
             case 'CNAME':
             case 'TXT':
-                $content = ['name' => $name, 'type' => $type, 'data' => $data];
+                $content = ['name' => $name, 'type' => $type, 'data' => $data, 'ttl' => $ttl];
                 break;
 
             case 'NS':
@@ -88,12 +88,13 @@ class DomainRecord extends AbstractApi
                     'data' => $data,
                     'priority' => (int) $priority,
                     'port' => (int) $port,
+                    'ttl' => $ttl,
                     'weight' => (int) $weight,
                 ];
                 break;
 
             case 'MX':
-                $content = ['type' => $type, 'name' => $name, 'data' => $data, 'priority' => $priority];
+                $content = ['type' => $type, 'name' => $name, 'data' => $data, 'priority' => $priority, 'ttl' => $ttl];
                 break;
 
             default:
@@ -120,9 +121,9 @@ class DomainRecord extends AbstractApi
      *
      * @return DomainRecordEntity
      */
-    public function update($domainName, $recordId, $name = null, $data = null, $priority = null, $port = null, $weight = null)
+    public function update($domainName, $recordId, $name = null, $data = null, $priority = null, $port = null, $weight = null, $ttl = null)
     {
-        $content = compact('name', 'data', 'priority', 'port', 'weight');
+        $content = compact('name', 'data', 'priority', 'port', 'ttl', 'weight');
         $content = array_filter($content, function ($val) {
             return $val !== null;
         });
